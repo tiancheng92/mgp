@@ -12,7 +12,7 @@ type withCode struct {
 }
 
 func WithCode(key string, errInfo any) error {
-	code, ok := codes.Load(key)
+	code, ok := keys.Load(key)
 	if !ok {
 		code = 500000
 	}
