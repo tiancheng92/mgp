@@ -21,8 +21,8 @@ type PaginateInfo struct {
 	PageSize int   `json:"page_size"` // 每页数据量
 }
 
-type PaginateData[D any] struct {
-	Items    D             `json:"items"`    // 数据详情列表
+type PaginateData[M any] struct {
+	Items    []M           `json:"items"`    // 数据详情列表
 	Paginate *PaginateInfo `json:"paginate"` // 分页信息
 }
 
