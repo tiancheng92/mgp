@@ -22,14 +22,14 @@ type PaginateInfo struct {
 }
 
 type PaginateData[M any] struct {
-	Items    []M           `json:"items"`    // 数据详情列表
-	Paginate *PaginateInfo `json:"paginate"` // 分页信息
+	*PaginateInfo
+	Items []*M
 }
 
 func (p *PaginateData[M]) GetPaginate() *PaginateInfo {
 	info := new(PaginateInfo)
 	if p != nil {
-		info = p.Paginate
+		info = p.PaginateInfo
 	}
 	if info.PageSize == 0 {
 		info.PageSize = int(info.Total)
@@ -45,7 +45,7 @@ func (p *PaginateData[M]) GetItems() any {
 }
 
 func (p *PaginateData[M]) Init(q *PaginateQuery) {
-	p.Paginate = &PaginateInfo{
+	p.PaginateInfo = &PaginateInfo{
 		Page:     q.Page,
 		PageSize: q.PageSize,
 	}

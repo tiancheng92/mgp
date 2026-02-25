@@ -17,6 +17,11 @@ type Result[D any] struct {
 	Code int    `json:"code"` // 状态码
 }
 
+type ResultPaginateData[D any] struct {
+	Items    D             `json:"items"`    // 数据详情列表
+	Paginate *PaginateInfo `json:"paginate"` // 分页信息
+}
+
 func Response(ctx *gin.Context, data any, err error) {
 	if ctx.IsAborted() {
 		return
@@ -53,7 +58,7 @@ func handleError(ctx *gin.Context, result *Result[any], err error) {
 
 func handleSuccess(ctx *gin.Context, result *Result[any], data any) {
 	if d, ok := data.(PaginateInterface); ok {
-		pd := new(PaginateData[any])
+		pd := new(ResultPaginateData[any])
 		pd.Items = d.GetItems()
 		pd.Paginate = d.GetPaginate()
 		result.Data = pd
