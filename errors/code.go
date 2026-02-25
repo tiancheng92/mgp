@@ -63,7 +63,7 @@ func ParseCoder(err error) Coder {
 
 	var withCodeErr withCode
 
-	if As(err, withCodeErr) {
+	if As(err, &withCodeErr) {
 		if res, ok := codes.Load(withCodeErr.code); ok {
 			return res.(Coder)
 		}
