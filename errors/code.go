@@ -61,9 +61,9 @@ func ParseCoder(err error) Coder {
 		return nil
 	}
 
-	var withCodeErr *withCode
+	var withCodeErr withCode
 
-	if As(err, &withCodeErr) {
+	if As(err, withCodeErr) {
 		if res, ok := codes.Load(withCodeErr.code); ok {
 			return res.(Coder)
 		}
