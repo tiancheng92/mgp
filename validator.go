@@ -3,6 +3,7 @@ package mgp
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
@@ -10,6 +11,8 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"github.com/tiancheng92/mgp/errors"
+	"github.com/tiancheng92/mgp/errors/default_error_code"
 )
 
 var (
@@ -81,4 +84,16 @@ func defaultTranslateFunc(translator ut.Translator, fieldError validator.FieldEr
 		panic(fmt.Sprintf("register validation failed: %+v", err))
 	}
 	return msg
+}
+
+func HandleValidationErr(err error) error {
+	if validationErr, ok := errors.AsType[validator.ValidationErrors](err); ok {
+		errList := make([]string, 0, len(validationErr))
+		for _, v := range validationErr.Translate(translator) {
+			errList = append(errList, v)
+		}
+		return errors.WithCode(default_error_code.ErrClientParam, strings.Join(errList, "; "))
+	}
+
+	return errors.WithCode(default_error_code.ErrClientParam, err)
 }

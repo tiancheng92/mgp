@@ -5,11 +5,9 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"strconv"
-	"strings"
 
 	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/websocket"
 	"github.com/pretty66/websocketproxy"
 	"github.com/tiancheng92/mgp/errors"
@@ -207,14 +205,5 @@ func (c *Context) BindPaginateQuery(ptr *PaginateQuery) *Context {
 
 // renderValidationError 渲染验证错误
 func (c *Context) renderValidationError(err error) {
-	var validationErr validator.ValidationErrors
-	if errors.As(err, &validationErr) {
-		errList := make([]string, 0, len(validationErr))
-		for _, v := range validationErr.Translate(translator) {
-			errList = append(errList, v)
-		}
-		Response(c.Context, nil, errors.WithCode(default_error_code.ErrClientParam, strings.Join(errList, "; ")))
-		return
-	}
-	Response(c.Context, nil, errors.WithCode(default_error_code.ErrClientParam, err))
+	Response(c.Context, nil, HandleValidationErr(err))
 }
