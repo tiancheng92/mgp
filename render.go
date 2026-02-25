@@ -3,12 +3,12 @@ package mgp
 import (
 	"bytes"
 	"fmt"
-	"mgp/errors"
 	"net/http"
 	"strconv"
 
 	"github.com/bytedance/sonic"
 	"github.com/gin-gonic/gin"
+	"github.com/tiancheng92/mgp/errors"
 )
 
 type Result[D any] struct {

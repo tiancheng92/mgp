@@ -2,8 +2,6 @@ package mgp
 
 import (
 	"bytes"
-	"mgp/errors"
-	"mgp/errors/default_error_code"
 	"net/http"
 	"net/http/httputil"
 	"strconv"
@@ -14,6 +12,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/websocket"
 	"github.com/pretty66/websocketproxy"
+	"github.com/tiancheng92/mgp/errors"
+	"github.com/tiancheng92/mgp/errors/default_error_code"
 )
 
 var upGrader = websocket.Upgrader{
