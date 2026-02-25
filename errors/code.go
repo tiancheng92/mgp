@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"errors"
 	"net/http"
 	"sync"
 )
@@ -61,9 +62,7 @@ func ParseCoder(err error) Coder {
 		return nil
 	}
 
-	var withCodeErr = new(withCode)
-
-	if As(err, withCodeErr) {
+	if withCodeErr, ok := errors.AsType[*withCode](err); ok {
 		if res, ok := codes.Load(withCodeErr.code); ok {
 			return res.(Coder)
 		}
