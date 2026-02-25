@@ -25,3 +25,28 @@ type PaginateData[D any] struct {
 	Items    D             `json:"items"`    // 数据详情列表
 	Paginate *PaginateInfo `json:"paginate"` // 分页信息
 }
+
+func (p *PaginateData[M]) GetPaginate() *PaginateInfo {
+	info := new(PaginateInfo)
+	if p != nil {
+		info = p.Paginate
+	}
+	if info.PageSize == 0 {
+		info.PageSize = int(info.Total)
+	}
+	return info
+}
+
+func (p *PaginateData[M]) GetItems() any {
+	if p != nil {
+		return p.Items
+	}
+	return nil
+}
+
+func (p *PaginateData[M]) Init(q *PaginateQuery) {
+	p.Paginate = &PaginateInfo{
+		Page:     q.Page,
+		PageSize: q.PageSize,
+	}
+}

@@ -1,6 +1,6 @@
 package default_error_code
 
-import "mgp/errors"
+import "github.com/tiancheng92/mgp/errors"
 
 const ErrClientParam string = "ErrClientParam"
 const ErrServer string = "ErrServer"
