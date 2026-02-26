@@ -65,8 +65,8 @@ func handleSuccess(ctx *gin.Context, result *Result[any], data any) {
 	} else {
 		result.Data = data
 	}
-	result.Msg = SuccessMsg
-	result.Code = SuccessCode
+	result.Msg = successMsg
+	result.Code = successCode
 	b, _ := sonic.Marshal(result)
 	ctx.Data(http.StatusOK, "application/json", b)
 }

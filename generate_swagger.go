@@ -27,7 +27,7 @@ func GenerateSwagger(routes []*Route, groups []*Group, defaultResponses []*Retur
 		writeGroup(groups, fullFileContent, packagesToImport)
 	}
 
-	f, err := os.Create(SwagFilePath)
+	f, err := os.Create(swagFilePath)
 	if err != nil {
 		panic(err)
 	}

@@ -1,19 +1,19 @@
 package mgp
 
 var (
-	SuccessMsg   = "Success"
-	SuccessCode  = 200000
-	SwagFilePath = "./goswag.go"
+	successMsg   = "Success"
+	successCode  = 200000
+	swagFilePath = "./goswag.go"
 )
 
 func SetSuccessMsg(msg string) {
-	SuccessMsg = msg
+	successMsg = msg
 }
 
 func SetSuccessCode(code int) {
-	SuccessCode = code
+	successCode = code
 }
 
 func SetSwagFileName(path string) {
-	SwagFilePath = path
+	swagFilePath = path
 }
