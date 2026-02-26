@@ -142,10 +142,12 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			s.WriteString("// @Security ApiKeyAuth\n")
 		}
 
-		if routes[i].Path != "" {
-			sampleRegexp := regexp.MustCompile(`:(\w+)`)
-			s.WriteString(fmt.Sprintf("// @Router %s [%s]\n", sampleRegexp.ReplaceAllString(routes[i].Path, "{$1}"), strings.ToLower(routes[i].Method)))
+		if routes[i].Path == "" {
+			routes[i].Path = "/"
 		}
+
+		sampleRegexp := regexp.MustCompile(`:(\w+)`)
+		s.WriteString(fmt.Sprintf("// @Router %s [%s]\n", sampleRegexp.ReplaceAllString(routes[i].Path, "{$1}"), strings.ToLower(routes[i].Method)))
 
 		if routes[i].FuncName != "" {
 			s.WriteString(fmt.Sprintf("func %s() {} //nolint:unused \n", routes[i].FuncName))
