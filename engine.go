@@ -40,6 +40,46 @@ func (e *Engine) Handle(httpMethod, relativePath string, f func(c *Context)) Swa
 	return gr
 }
 
+func (e *Engine) Use(handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.Use(handlers...)
+}
+
+func (e *Engine) NoRoute(handlers ...gin.HandlerFunc) {
+	e.Engine.NoRoute(handlers...)
+}
+
+func (e *Engine) NoMethod(handlers ...gin.HandlerFunc) {
+	e.Engine.NoMethod(handlers...)
+}
+
+func (e *Engine) RawGET(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.GET(relativePath, handlers...)
+}
+
+func (e *Engine) RawPOST(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.POST(relativePath, handlers...)
+}
+
+func (e *Engine) RawPUT(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.PUT(relativePath, handlers...)
+}
+
+func (e *Engine) RawPATCH(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.PATCH(relativePath, handlers...)
+}
+
+func (e *Engine) RawDELETE(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.DELETE(relativePath, handlers...)
+}
+
+func (e *Engine) RawOPTIONS(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.OPTIONS(relativePath, handlers...)
+}
+
+func (e *Engine) RawHEAD(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes {
+	return e.Engine.HEAD(relativePath, handlers...)
+}
+
 func (e *Engine) GET(relativePath string, f func(c *Context)) Swagger {
 	return e.Handle(http.MethodGet, relativePath, f)
 }
@@ -60,18 +100,10 @@ func (e *Engine) DELETE(relativePath string, f func(c *Context)) Swagger {
 	return e.Handle(http.MethodDelete, relativePath, f)
 }
 
-func (e *Engine) Options(relativePath string, f func(c *Context)) Swagger {
+func (e *Engine) OPTIONS(relativePath string, f func(c *Context)) Swagger {
 	return e.Handle(http.MethodOptions, relativePath, f)
 }
 
-func (e *Engine) Head(relativePath string, f func(c *Context)) Swagger {
+func (e *Engine) HEAD(relativePath string, f func(c *Context)) Swagger {
 	return e.Handle(http.MethodHead, relativePath, f)
-}
-
-func (e *Engine) Connect(relativePath string, f func(c *Context)) Swagger {
-	return e.Handle(http.MethodConnect, relativePath, f)
-}
-
-func (e *Engine) Trace(relativePath string, f func(c *Context)) Swagger {
-	return e.Handle(http.MethodTrace, relativePath, f)
 }

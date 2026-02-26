@@ -62,11 +62,3 @@ func (g *RouterGroup) Options(relativePath string, f func(c *Context)) Swagger {
 func (g *RouterGroup) Head(relativePath string, f func(c *Context)) Swagger {
 	return g.Handle(http.MethodHead, relativePath, f)
 }
-
-func (g *RouterGroup) Connect(relativePath string, f func(c *Context)) Swagger {
-	return g.Handle(http.MethodConnect, relativePath, f)
-}
-
-func (g *RouterGroup) Trace(relativePath string, f func(c *Context)) Swagger {
-	return g.Handle(http.MethodTrace, relativePath, f)
-}
