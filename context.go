@@ -25,12 +25,10 @@ type Context struct {
 	ws *websocket.Conn
 }
 
-// cp 创建一个新的 Context 实例
 func newContext(ctx *gin.Context) *Context {
 	return &Context{ctx, nil}
 }
 
-// do 执行函数，如果上下文没有被中止
 func (c *Context) do(f func()) *Context {
 	if !c.IsAborted() {
 		f()
@@ -38,7 +36,7 @@ func (c *Context) do(f func()) *Context {
 	return c
 }
 
-func (c *Context) Proxy(f func() (*httputil.ReverseProxy, error)) {
+func (c *Context) HP(f func() (*httputil.ReverseProxy, error)) {
 	c.do(func() {
 		p, err := f()
 		if err != nil {
@@ -49,7 +47,6 @@ func (c *Context) Proxy(f func() (*httputil.ReverseProxy, error)) {
 	})
 }
 
-// HR 处理函数并渲染响应
 func (c *Context) HR(f any) {
 	c.do(func() {
 		var err error
@@ -71,7 +68,6 @@ func (c *Context) HR(f any) {
 	})
 }
 
-// HD 处理函数并渲染响应(文件下载)
 func (c *Context) HD(f any, filename string) {
 	c.do(func() {
 		var err error
@@ -95,7 +91,6 @@ func (c *Context) HD(f any, filename string) {
 	})
 }
 
-// HW 处理函数并渲染响应
 func (c *Context) HW(f func(*websocket.Conn)) {
 	c.do(func() {
 		var err error
@@ -134,7 +129,6 @@ func (c *Context) handleWebsocketError(err error) {
 	c.ws.Close()
 }
 
-// BindBody 绑定请求体到指定结构体
 func (c *Context) BindBody(ptr ...any) *Context {
 	return c.do(func() {
 		for i := range ptr {
@@ -146,7 +140,6 @@ func (c *Context) BindBody(ptr ...any) *Context {
 	})
 }
 
-// BindQuery 绑定查询参数到指定结构体
 func (c *Context) BindQuery(ptr ...any) *Context {
 	return c.do(func() {
 		for i := range ptr {
@@ -158,7 +151,6 @@ func (c *Context) BindQuery(ptr ...any) *Context {
 	})
 }
 
-// BindParams 绑定 URI 参数到指定结构体
 func (c *Context) BindParams(ptr ...any) *Context {
 	return c.do(func() {
 		for i := range ptr {
@@ -170,7 +162,6 @@ func (c *Context) BindParams(ptr ...any) *Context {
 	})
 }
 
-// BindHeader 绑定请求头到指定结构体
 func (c *Context) BindHeader(ptr ...any) *Context {
 	return c.do(func() {
 		for i := range ptr {
@@ -182,7 +173,6 @@ func (c *Context) BindHeader(ptr ...any) *Context {
 	})
 }
 
-// BindPaginateQuery 绑定分页查询参数
 func (c *Context) BindPaginateQuery(ptr *PaginateQuery) *Context {
 	return c.do(func() {
 		page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -203,7 +193,6 @@ func (c *Context) BindPaginateQuery(ptr *PaginateQuery) *Context {
 	})
 }
 
-// renderValidationError 渲染验证错误
 func (c *Context) renderValidationError(err error) {
 	Response(c.Context, nil, HandleValidationErr(err))
 }

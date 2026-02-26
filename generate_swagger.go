@@ -11,18 +11,11 @@ import (
 	"strings"
 )
 
-const fileName = "goswag.go"
-
-func GenerateSwagger(path string, routes []*Route, groups []*Group, defaultResponses []*ReturnType, defaultUseApiKeyAuth bool) {
+func GenerateSwagger(routes []*Route, groups []*Group, defaultResponses []*ReturnType, defaultUseApiKeyAuth bool) {
 	var (
 		packagesToImport = make(map[string]bool)
 		fullFileContent  = new(strings.Builder)
 	)
-
-	if path == "" {
-		path = "."
-	}
-
 	routes, groups = addDefaultResponses(routes, groups, defaultResponses)
 	routes, groups = addDefaultUseApiKeyAuth(routes, groups, defaultUseApiKeyAuth)
 
@@ -34,7 +27,7 @@ func GenerateSwagger(path string, routes []*Route, groups []*Group, defaultRespo
 		writeGroup(groups, fullFileContent, packagesToImport)
 	}
 
-	f, err := os.Create(fmt.Sprintf("%s/%s", path, fileName))
+	f, err := os.Create(SwagFilePath)
 	if err != nil {
 		panic(err)
 	}

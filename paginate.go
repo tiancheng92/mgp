@@ -8,17 +8,17 @@ type PaginateInterface interface {
 }
 
 type PaginateQuery struct {
-	Page     int        `form:"page"`      // 页数
-	PageSize int        `form:"page_size"` // 每页数据量
-	Order    string     `form:"order"`     // 排序方式
-	Search   string     `form:"search"`    // 关键字搜索
-	Params   url.Values // 其他参数
+	Page     int    `form:"page"`
+	PageSize int    `form:"page_size"`
+	Order    string `form:"order"`
+	Search   string `form:"search"`
+	Params   url.Values
 }
 
 type PaginateInfo struct {
-	Total    int64 `json:"total"`     // 数据总数
-	Page     int   `json:"page"`      // 页数
-	PageSize int   `json:"page_size"` // 每页数据量
+	Total    int64 `json:"total"`
+	Page     int   `json:"page"`
+	PageSize int   `json:"page_size"`
 }
 
 type PaginateData[M any] struct {
