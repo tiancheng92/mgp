@@ -144,8 +144,8 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			s.WriteString("// @Security ApiKeyAuth\n")
 		}
 
-		if routes[i].Path == "" {
-			routes[i].Path = "/"
+		if !strings.HasPrefix(routes[i].Path, "/") {
+			routes[i].Path = fmt.Sprintf("/%s", routes[i].Path)
 		}
 
 		sampleRegexp := regexp.MustCompile(`:(\w+)`)
