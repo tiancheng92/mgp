@@ -113,7 +113,7 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			s.WriteString(fmt.Sprintf("// @Tags %s\n", groupName))
 		}
 
-		if routes[i].Method == http.MethodPost || routes[i].Method == http.MethodPut {
+		if routes[i].Method == http.MethodPost || routes[i].Method == http.MethodPut || routes[i].Method == http.MethodPatch {
 			addTextIfNotEmptyOrDefault(s, "json", "// @Accept %s\n", routes[i].Accepts...)
 		}
 
