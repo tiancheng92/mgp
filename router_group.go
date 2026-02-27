@@ -32,22 +32,22 @@ func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *R
 	return sg
 }
 
-func (g *RouterGroup) SetTags(tags ...string) *RouterGroup {
+func (g *RouterGroup) SetTagsForSwagger(tags ...string) *RouterGroup {
 	g.defaultTags = tags
 	return g
 }
 
-func (g *RouterGroup) SetAccepts(accepts ...string) *RouterGroup {
+func (g *RouterGroup) SetAcceptsForSwagger(accepts ...string) *RouterGroup {
 	g.defaultAccepts = accepts
 	return g
 }
 
-func (g *RouterGroup) SetProduces(produces ...string) *RouterGroup {
+func (g *RouterGroup) SetProducesForSwagger(produces ...string) *RouterGroup {
 	g.defaultProduces = produces
 	return g
 }
 
-func (g *RouterGroup) SetUseApiKeyAuth() *RouterGroup {
+func (g *RouterGroup) SetUseApiKeyAuthForSwagger() *RouterGroup {
 	g.defaultUseApiKeyAuth = true
 	return g
 }

@@ -1,15 +1,15 @@
 package mgp
 
 type Swagger interface {
-	SetSummary(summary string) Swagger
-	SetDescription(description string) Swagger
-	SetTags(tags ...string) Swagger
-	SetAccepts(accept ...string) Swagger
-	SetProduces(produce ...string) Swagger
-	SetBody(data interface{}) Swagger
-	SetQuery(query interface{}) Swagger
-	SetPath(path interface{}) Swagger
-	SetHeader(header interface{}) Swagger
-	SetReturns(data ...*ReturnType) Swagger
-	SetUseApiKeyAuth() Swagger
+	SetSummaryForSwagger(summary string) Swagger
+	SetDescriptionForSwagger(description string) Swagger
+	SetTagsForSwagger(tags ...string) Swagger
+	SetAcceptsForSwagger(accept ...string) Swagger
+	SetProducesForSwagger(produce ...string) Swagger
+	SetBodyForSwagger(data interface{}) Swagger
+	SetQueryForSwagger(query interface{}) Swagger
+	SetPathForSwagger(path interface{}) Swagger
+	SetHeaderForSwagger(header interface{}) Swagger
+	SetReturnsForSwagger(data ...*ReturnType) Swagger
+	SetUseApiKeyAuthForSwagger() Swagger
 }
