@@ -9,16 +9,47 @@ import (
 )
 
 type RouterGroup struct {
-	routerGroup *gin.RouterGroup
-	groupName   string
-	groups      []*RouterGroup
-	routes      []*Route
+	routerGroup          *gin.RouterGroup
+	groupName            string
+	groups               []*RouterGroup
+	routes               []*Route
+	defaultTags          []string
+	defaultAccepts       []string
+	defaultProduces      []string
+	defaultUseApiKeyAuth bool
 }
 
 func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *RouterGroup {
-	sg := &RouterGroup{routerGroup: g.routerGroup.Group(relativePath, handlers...), groupName: getFullPath(g.groupName, relativePath)}
+	sg := &RouterGroup{
+		routerGroup:          g.routerGroup.Group(relativePath, handlers...),
+		groupName:            getFullPath(g.groupName, relativePath),
+		defaultTags:          g.defaultTags,
+		defaultAccepts:       g.defaultAccepts,
+		defaultProduces:      g.defaultProduces,
+		defaultUseApiKeyAuth: g.defaultUseApiKeyAuth,
+	}
 	g.groups = append(g.groups, sg)
 	return sg
+}
+
+func (g *RouterGroup) SetTags(tags ...string) *RouterGroup {
+	g.defaultTags = tags
+	return g
+}
+
+func (g *RouterGroup) SetAccepts(accepts ...string) *RouterGroup {
+	g.defaultAccepts = accepts
+	return g
+}
+
+func (g *RouterGroup) SetProduces(produces ...string) *RouterGroup {
+	g.defaultProduces = produces
+	return g
+}
+
+func (g *RouterGroup) SetUseApiKeyAuth() *RouterGroup {
+	g.defaultUseApiKeyAuth = true
+	return g
 }
 
 func (g *RouterGroup) Handle(httpMethod, relativePath string, f func(c *Context)) Swagger {
@@ -27,9 +58,13 @@ func (g *RouterGroup) Handle(httpMethod, relativePath string, f func(c *Context)
 	})
 	gl := strings.Split(g.groupName, "/")
 	gr := &Route{
-		Path:     getFullPath(g.groupName, relativePath),
-		Method:   httpMethod,
-		FuncName: fmt.Sprintf("%s%s", camelString(gl[len(gl)-1]), getFuncName(f)),
+		Path:          getFullPath(g.groupName, relativePath),
+		Method:        httpMethod,
+		FuncName:      fmt.Sprintf("%s%s", camelString(gl[len(gl)-1]), getFuncName(f)),
+		Tags:          g.defaultTags,
+		Accepts:       g.defaultAccepts,
+		Produces:      g.defaultProduces,
+		UseApiKeyAuth: g.defaultUseApiKeyAuth,
 	}
 	g.routes = append(g.routes, gr)
 	return gr
