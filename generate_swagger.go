@@ -134,9 +134,11 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			s.WriteString(fmt.Sprintf("// @Param request header %s true \"Header\"\n", getStructAndPackageName(routes[i].HeaderStruct)))
 		}
 
-		if routes[i].Returns != nil {
-			writeReturns(routes[i].Returns, s, packagesToImport)
+		if routes[i].Returns == nil {
+			routes[i].Returns = []*ReturnType{{StatusCode: http.StatusOK}}
 		}
+
+		writeReturns(routes[i].Returns, s, packagesToImport)
 
 		if routes[i].UseApiKeyAuth {
 			s.WriteString("// @Security ApiKeyAuth\n")
