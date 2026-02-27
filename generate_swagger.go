@@ -102,7 +102,7 @@ func writeFileContent(file io.Writer, content string, packagesToImport map[strin
 func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packagesToImport map[string]bool) {
 	for i := range routes {
 		addLineIfNotEmpty(s, routes[i].Summary, "// @Summary %s\n")
-		addTextIfNotEmptyOrDefault(s, routes[i].Summary, "// @Description %s\n", routes[i].Description)
+		addLineIfNotEmpty(s, routes[i].Description, "// @Description %s\n")
 
 		if len(routes[i].Tags) > 0 {
 			s.WriteString(fmt.Sprintf("// @Tags %s\n", strings.Join(routes[i].Tags, ",")))
