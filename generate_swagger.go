@@ -11,13 +11,13 @@ import (
 	"strings"
 )
 
-func GenerateSwagger(routes []*Route, groups []*Group, defaultResponses []*ReturnType, defaultUseApiKeyAuth bool) {
+func GenerateSwagger(routes []*Route, groups []*Group, defaultResponses []*ReturnType) {
 	var (
 		packagesToImport = make(map[string]bool)
 		fullFileContent  = new(strings.Builder)
 	)
 	routes, groups = addDefaultResponses(routes, groups, defaultResponses)
-	routes, groups = addDefaultUseApiKeyAuth(routes, groups, defaultUseApiKeyAuth)
+	routes, groups = addDefaultUseApiKeyAuth(routes, groups, false)
 
 	if routes != nil {
 		writeRoutes("", routes, fullFileContent, packagesToImport)

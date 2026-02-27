@@ -18,7 +18,7 @@ func New(defaultResponses ...*ReturnType) *Engine {
 }
 
 func (e *Engine) GenerateSwagger() {
-	GenerateSwagger(e.routes, toGoSwagGroup(e.groups), e.defaultResponses, true)
+	GenerateSwagger(e.routes, toGoSwagGroup(e.groups), e.defaultResponses)
 }
 
 func (e *Engine) Group(relativePath string, handlers ...gin.HandlerFunc) *RouterGroup {
