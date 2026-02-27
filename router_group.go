@@ -17,6 +17,7 @@ type RouterGroup struct {
 	defaultAccepts       []string
 	defaultProduces      []string
 	defaultUseApiKeyAuth bool
+	defaultHidde         bool
 }
 
 func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *RouterGroup {
@@ -27,28 +28,34 @@ func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *R
 		defaultAccepts:       g.defaultAccepts,
 		defaultProduces:      g.defaultProduces,
 		defaultUseApiKeyAuth: g.defaultUseApiKeyAuth,
+		defaultHidde:         g.defaultHidde,
 	}
 	g.groups = append(g.groups, sg)
 	return sg
 }
 
-func (g *RouterGroup) SetTagsForSwagger(tags ...string) *RouterGroup {
+func (g *RouterGroup) SwaggerTags(tags ...string) *RouterGroup {
 	g.defaultTags = tags
 	return g
 }
 
-func (g *RouterGroup) SetAcceptsForSwagger(accepts ...string) *RouterGroup {
+func (g *RouterGroup) SwaggerAccepts(accepts ...string) *RouterGroup {
 	g.defaultAccepts = accepts
 	return g
 }
 
-func (g *RouterGroup) SetProducesForSwagger(produces ...string) *RouterGroup {
+func (g *RouterGroup) SwaggerProduces(produces ...string) *RouterGroup {
 	g.defaultProduces = produces
 	return g
 }
 
-func (g *RouterGroup) SetUseApiKeyAuthForSwagger() *RouterGroup {
+func (g *RouterGroup) SwaggerUseApiKeyAuth() *RouterGroup {
 	g.defaultUseApiKeyAuth = true
+	return g
+}
+
+func (g *RouterGroup) SwaggerHidde() *RouterGroup {
+	g.defaultHidde = true
 	return g
 }
 
@@ -65,6 +72,7 @@ func (g *RouterGroup) Handle(httpMethod, relativePath string, f func(c *Context)
 		Accepts:       g.defaultAccepts,
 		Produces:      g.defaultProduces,
 		UseApiKeyAuth: g.defaultUseApiKeyAuth,
+		Hidde:         g.defaultHidde,
 	}
 	g.routes = append(g.routes, gr)
 	return gr

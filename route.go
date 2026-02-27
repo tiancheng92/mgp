@@ -15,59 +15,65 @@ type Route struct {
 	PathStruct    any
 	Returns       []*ReturnType
 	UseApiKeyAuth bool
+	Hidde         bool
 }
 
-func (r *Route) SetSummaryForSwagger(summary string) Swagger {
+func (r *Route) SwaggerSummary(summary string) Swagger {
 	r.Summary = summary
 	return r
 }
 
-func (r *Route) SetDescriptionForSwagger(description string) Swagger {
+func (r *Route) SwaggerDescription(description string) Swagger {
 	r.Description = description
 	return r
 }
 
-func (r *Route) SetTagsForSwagger(tags ...string) Swagger {
+func (r *Route) SwaggerTags(tags ...string) Swagger {
 	r.Tags = tags
 	return r
 }
 
-func (r *Route) SetAcceptsForSwagger(accepts ...string) Swagger {
+func (r *Route) SwaggerAccepts(accepts ...string) Swagger {
 	r.Accepts = accepts
 	return r
 }
 
-func (r *Route) SetProducesForSwagger(produces ...string) Swagger {
+func (r *Route) SwaggerProduces(produces ...string) Swagger {
 	r.Produces = produces
 	return r
 }
 
-func (r *Route) SetBodyForSwagger(body interface{}) Swagger {
+func (r *Route) SwaggerBody(body interface{}) Swagger {
 	r.BodyStruct = body
 	return r
 }
 
-func (r *Route) SetQueryForSwagger(query interface{}) Swagger {
+func (r *Route) SwaggerQuery(query interface{}) Swagger {
 	r.QueryStruct = query
 	return r
 }
 
-func (r *Route) SetPathForSwagger(path interface{}) Swagger {
+func (r *Route) SwaggerPath(path interface{}) Swagger {
 	r.PathStruct = path
 	return r
 }
 
-func (r *Route) SetHeaderForSwagger(header interface{}) Swagger {
+func (r *Route) SwaggerHeader(header interface{}) Swagger {
 	r.HeaderStruct = header
 	return r
 }
 
-func (r *Route) SetReturnsForSwagger(returns ...*ReturnType) Swagger {
+func (r *Route) SwaggerReturns(returns ...*ReturnType) Swagger {
 	r.Returns = returns
 	return r
 }
 
-func (r *Route) SetUseApiKeyAuthForSwagger() Swagger {
+func (r *Route) SwaggerUseApiKeyAuth() Swagger {
 	r.UseApiKeyAuth = true
+	return r
+}
+
+func (r *Route) SwaggerHidde() Swagger {
+	r.Hidde = true
 	return r
 }
