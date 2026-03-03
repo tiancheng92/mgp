@@ -222,8 +222,11 @@ func writeIfIsGenericType(s *strings.Builder, data *ReturnType, respType string)
 		return
 	}
 
+	fmt.Println(bodyName)
 	bodyName = regexp.MustCompile(`\[(\w+/)*(\w+)\.`).ReplaceAllString(bodyName, "[$2.")
+	fmt.Println(bodyName)
 	bodyName = regexp.MustCompile(`](\w+/)*(\w+)\.`).ReplaceAllString(bodyName, "]$2.")
+	fmt.Println(bodyName)
 	bodyName = strings.ReplaceAll(bodyName, "github.com/tiancheng92/mgp", "mgp")
 	s.WriteString(fmt.Sprintf("// %s %d {object} %s", respType, data.StatusCode, bodyName))
 	return isGeneric
