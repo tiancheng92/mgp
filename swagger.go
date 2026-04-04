@@ -12,5 +12,5 @@ type Swagger interface {
 	SwaggerHeader(header interface{}) Swagger
 	SwaggerReturns(data ...*ReturnType) Swagger
 	SwaggerUseApiKeyAuth() Swagger
-	SwaggerHidde() Swagger
+	SwaggerHidden() Swagger
 }

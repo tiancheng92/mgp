@@ -17,7 +17,7 @@ type RouterGroup struct {
 	defaultAccepts       []string
 	defaultProduces      []string
 	defaultUseApiKeyAuth bool
-	defaultHidde         bool
+	defaultHidden        bool
 }
 
 func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *RouterGroup {
@@ -28,7 +28,7 @@ func (g *RouterGroup) Group(relativePath string, handlers ...gin.HandlerFunc) *R
 		defaultAccepts:       g.defaultAccepts,
 		defaultProduces:      g.defaultProduces,
 		defaultUseApiKeyAuth: g.defaultUseApiKeyAuth,
-		defaultHidde:         g.defaultHidde,
+		defaultHidden:        g.defaultHidden,
 	}
 	g.groups = append(g.groups, sg)
 	return sg
@@ -54,8 +54,8 @@ func (g *RouterGroup) SwaggerUseApiKeyAuth() *RouterGroup {
 	return g
 }
 
-func (g *RouterGroup) SwaggerHidde() *RouterGroup {
-	g.defaultHidde = true
+func (g *RouterGroup) SwaggerHidden() *RouterGroup {
+	g.defaultHidden = true
 	return g
 }
 
@@ -72,7 +72,7 @@ func (g *RouterGroup) Handle(httpMethod, relativePath string, f func(c *Context)
 		Accepts:       g.defaultAccepts,
 		Produces:      g.defaultProduces,
 		UseApiKeyAuth: g.defaultUseApiKeyAuth,
-		Hidde:         g.defaultHidde,
+		Hidden:        g.defaultHidden,
 	}
 	g.routes = append(g.routes, gr)
 	return gr
@@ -98,10 +98,10 @@ func (g *RouterGroup) DELETE(relativePath string, f func(c *Context)) Swagger {
 	return g.Handle(http.MethodDelete, relativePath, f)
 }
 
-func (g *RouterGroup) Options(relativePath string, f func(c *Context)) Swagger {
+func (g *RouterGroup) OPTIONS(relativePath string, f func(c *Context)) Swagger {
 	return g.Handle(http.MethodOptions, relativePath, f)
 }
 
-func (g *RouterGroup) Head(relativePath string, f func(c *Context)) Swagger {
+func (g *RouterGroup) HEAD(relativePath string, f func(c *Context)) Swagger {
 	return g.Handle(http.MethodHead, relativePath, f)
 }

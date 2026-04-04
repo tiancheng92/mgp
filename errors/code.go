@@ -41,14 +41,8 @@ func Register(key string, code int, httpStatus int, message string) {
 	if code == 0 {
 		panic("code '0' is ErrUnknown error code")
 	}
-	if _, ok := keys.Load(key); ok {
-		keys.Delete(key)
-	}
 	keys.Store(key, code)
 
-	if _, ok := codes.Load(code); ok {
-		codes.Delete(code)
-	}
 	codes.Store(code, &errCode{
 		ErrCode:    code,
 		HttpStatus: httpStatus,

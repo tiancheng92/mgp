@@ -23,9 +23,19 @@ func getFullPath(groupName, relativePath string) string {
 }
 
 func getFuncName(handlers ...func(c *Context)) string {
+	if len(handlers) == 0 {
+		return ""
+	}
 	lastHandler := handlers[len(handlers)-1]
+	if lastHandler == nil {
+		return ""
+	}
 
-	fullFuncName := runtime.FuncForPC(reflect.ValueOf(lastHandler).Pointer()).Name()
+	f := runtime.FuncForPC(reflect.ValueOf(lastHandler).Pointer())
+	if f == nil {
+		return ""
+	}
+	fullFuncName := f.Name()
 	funcNameSplit := strings.Split(fullFuncName, ".")
 	funcName := funcNameSplit[len(funcNameSplit)-1]
 	funcName = strings.TrimSuffix(funcName, "-fm")

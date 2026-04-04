@@ -28,7 +28,7 @@ type PaginateData[M any] struct {
 
 func (p *PaginateData[M]) GetPaginate() *PaginateInfo {
 	info := new(PaginateInfo)
-	if p != nil {
+	if p != nil && p.PaginateInfo != nil {
 		info = p.PaginateInfo
 	}
 	if info.PageSize == 0 {

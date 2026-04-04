@@ -8,7 +8,13 @@ import (
 	"os"
 	"reflect"
 	"regexp"
+	"sort"
 	"strings"
+)
+
+var (
+	routeParamRegexp   = regexp.MustCompile(`:(\w+)`)
+	genericTypeRegexp  = regexp.MustCompile(`(?:[\w.-]+/)+([\w.-]+)\.`)
 )
 
 func GenerateSwagger(routes []*Route, groups []*Group, defaultResponses []*ReturnType) {
@@ -80,7 +86,12 @@ func writeFileContent(file io.Writer, content string, packagesToImport map[strin
 			log.Fatalf("%+v", err)
 		}
 
+		pkgs := make([]string, 0, len(packagesToImport))
 		for pkg := range packagesToImport {
+			pkgs = append(pkgs, pkg)
+		}
+		sort.Strings(pkgs)
+		for _, pkg := range pkgs {
 			_, err = fmt.Fprintf(file, "\t_ \"%s\"\n", pkg)
 			if err != nil {
 				log.Fatalf("%+v", err)
@@ -101,7 +112,7 @@ func writeFileContent(file io.Writer, content string, packagesToImport map[strin
 
 func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packagesToImport map[string]bool) {
 	for i := range routes {
-		if routes[i].Hidde {
+		if routes[i].Hidden {
 			continue
 		}
 		addLineIfNotEmpty(s, routes[i].Summary, "// @Summary %s\n")
@@ -115,10 +126,6 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 
 		if routes[i].Method == http.MethodPost || routes[i].Method == http.MethodPut || routes[i].Method == http.MethodPatch {
 			addTextIfNotEmptyOrDefault(s, "json", "// @Accept %s\n", routes[i].Accepts...)
-		}
-
-		if routes[i].Returns != nil {
-			addTextIfNotEmptyOrDefault(s, "json", "// @Produce %s\n", routes[i].Produces...)
 		}
 
 		if routes[i].QueryStruct != nil {
@@ -141,6 +148,8 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			routes[i].Returns = []*ReturnType{{StatusCode: http.StatusOK}}
 		}
 
+		addTextIfNotEmptyOrDefault(s, "json", "// @Produce %s\n", routes[i].Produces...)
+
 		writeReturns(routes[i].Returns, s, packagesToImport)
 
 		if routes[i].UseApiKeyAuth {
@@ -151,8 +160,7 @@ func writeRoutes(groupName string, routes []*Route, s *strings.Builder, packages
 			routes[i].Path = fmt.Sprintf("/%s", routes[i].Path)
 		}
 
-		sampleRegexp := regexp.MustCompile(`:(\w+)`)
-		s.WriteString(fmt.Sprintf("// @Router %s [%s]\n", sampleRegexp.ReplaceAllString(routes[i].Path, "{$1}"), strings.ToLower(routes[i].Method)))
+		s.WriteString(fmt.Sprintf("// @Router %s [%s]\n", routeParamRegexp.ReplaceAllString(routes[i].Path, "{$1}"), strings.ToLower(routes[i].Method)))
 
 		if routes[i].FuncName != "" {
 			s.WriteString(fmt.Sprintf("func %s() {} //nolint:unused \n", routes[i].FuncName))
@@ -221,19 +229,18 @@ func writeIfIsGenericType(s *strings.Builder, data *ReturnType, respType string)
 	if !isGeneric {
 		return
 	}
-	bodyName = regexp.MustCompile(`(?:[\w.-]+/)+([\w.-]+)\.`).ReplaceAllString(bodyName, "$1.")
+	bodyName = genericTypeRegexp.ReplaceAllString(bodyName, "$1.")
 
 	s.WriteString(fmt.Sprintf("// %s %d {object} %s", respType, data.StatusCode, bodyName))
 	return isGeneric
 }
 
 func getStructAndPackageName(body any) string {
-	isPointer := reflect.TypeOf(body).Kind() == reflect.Ptr
-	if isPointer {
-		body = reflect.ValueOf(body).Elem().Interface()
+	t := reflect.TypeOf(body)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
 	}
-
-	return reflect.TypeOf(body).String()
+	return t.String()
 }
 
 func addTextIfNotEmptyOrDefault(s *strings.Builder, defaultText, format string, text ...string) {

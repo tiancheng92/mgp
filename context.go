@@ -85,8 +85,10 @@ func (c *Context) HD(f any, filename string) {
 		// 渲染响应
 		if err != nil {
 			Response(c.Context, nil, err)
+		} else if buf == nil {
+			Response(c.Context, nil, errors.WithCode(default_error_code.ErrServer, "download buffer is nil"))
 		} else {
-			ResponseDownloadSteam(c.Context, buf, filename)
+			ResponseDownloadStream(c.Context, buf, filename)
 		}
 	})
 }

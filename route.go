@@ -15,7 +15,7 @@ type Route struct {
 	PathStruct    any
 	Returns       []*ReturnType
 	UseApiKeyAuth bool
-	Hidde         bool
+	Hidden        bool
 }
 
 func (r *Route) SwaggerSummary(summary string) Swagger {
@@ -73,7 +73,7 @@ func (r *Route) SwaggerUseApiKeyAuth() Swagger {
 	return r
 }
 
-func (r *Route) SwaggerHidde() Swagger {
-	r.Hidde = true
+func (r *Route) SwaggerHidden() Swagger {
+	r.Hidden = true
 	return r
 }

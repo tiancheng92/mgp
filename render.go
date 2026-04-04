@@ -3,6 +3,7 @@ package mgp
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -71,7 +72,7 @@ func handleSuccess(ctx *gin.Context, result *Result[any], data any) {
 	ctx.Data(http.StatusOK, "application/json", b)
 }
 
-func ResponseDownloadSteam(ctx *gin.Context, buf *bytes.Buffer, fileName string) {
+func ResponseDownloadStream(ctx *gin.Context, buf *bytes.Buffer, fileName string) {
 	if ctx.IsAborted() {
 		return
 	}
@@ -80,19 +81,7 @@ func ResponseDownloadSteam(ctx *gin.Context, buf *bytes.Buffer, fileName string)
 	ctx.Header("Content-Length", strconv.Itoa(buf.Len()))
 	ctx.Header("Content-Type", "application/octet-stream")
 	ctx.Header("Content-Transfer-Encoding", "binary")
-	ctx.Header("Content-Disposition", fmt.Sprintf("attachment;filename=%s", fileName))
-	p := make([]byte, 4096)
-
-	for {
-		count, err := buf.Read(p)
-		if err != nil {
-			break
-		}
-		if count > 0 {
-			if _, err := ctx.Writer.Write(p[:count]); err != nil {
-				break
-			}
-			ctx.Writer.Flush()
-		}
-	}
+	ctx.Header("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	_, _ = io.Copy(ctx.Writer, buf)
+	ctx.Writer.Flush()
 }

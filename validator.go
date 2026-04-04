@@ -81,7 +81,7 @@ func defaultTranslateFunc(translator ut.Translator, fieldError validator.FieldEr
 	}
 	msg, err := translator.T(fmt.Sprintf("%s-%s", fieldError.Tag(), kindStr), fieldError.Field(), fieldError.Param())
 	if err != nil {
-		panic(fmt.Sprintf("register validation failed: %+v", err))
+		return fmt.Sprintf("%s:%s", fieldError.Field(), fieldError.Tag())
 	}
 	return msg
 }
